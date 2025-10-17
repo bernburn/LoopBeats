@@ -465,7 +465,7 @@ export default function Home() {
 
           <div className="w-full h-48 bg-gray-800 rounded-md flex items-center justify-center mb-4">
             {/* Placeholder image box */}
-            <img src="../assets/nftSampleImage.png" alt="NFT Preview" className="w-32 h-32 object-contain" />
+            <img src="/assets/nftSampleImage.png" alt="NFT Preview" className="w-32 h-32 object-contain" />
           </div>
 
           <div className="flex gap-2 justify-end">

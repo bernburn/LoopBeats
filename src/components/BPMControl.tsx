@@ -31,7 +31,7 @@ export function BPMControl({
   const [tapTimes, setTapTimes] = useState<number[]>([]);
   const [customBeatLength, setCustomBeatLength] = useState<string>("");
   const [customLoopDuration, setCustomLoopDuration] = useState<string>("");
-  const tapTimeoutRef = useRef<number | null>(null); // use browser-friendly timeout ID
+  const tapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // cross-env timeout ID
   const [customMode, setCustomMode] = useState(false);
   const [loopCustomMode, setLoopCustomMode] = useState(false);
 
