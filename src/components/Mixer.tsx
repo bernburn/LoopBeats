@@ -95,7 +95,7 @@ export function Mixer({
         </div>
       </div>
 
-      <TooltipProvider delayDuration={300}>
+      <TooltipProvider >
         <div
           ref={scrollContainerRef}
           className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800 pb-2"

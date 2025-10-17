@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, Square } from "lucide-react";
 import { sdk } from "@farcaster/miniapp-sdk";
 
+import { IoMdArrowRoundBack } from "react-icons/io";
+
 export default function Home() {
   useEffect(() => {
     const initializeFarcaster = async () => {
@@ -173,6 +175,49 @@ export default function Home() {
     [tracks, bpm]
   );
 
+  const [openModal, setOpenModal] = useState(false);
+  const [beatName, setBeatName] = useState("");
+  const [isMinting, setIsMinting] = useState(false);
+  const [mintResult, setMintResult] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleClick = () => {
+    setOpenModal(!openModal);
+    setMintResult(null);
+  };
+
+  const handleMint = async () => {
+    if (!beatName.trim()) {
+      setMintResult("Please enter a name for the beat.");
+      return;
+    }
+
+    try {
+      setIsMinting(true);
+      setMintResult(null);
+
+      // Placeholder minting flow - replace with actual NFT minting logic
+      // Example: upload beat audio/metadata to IPFS, create a mint tx, etc.
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
+  setMintResult(`Minted "${beatName}" successfully (mock)`);
+  setBeatName("");
+  setOpenModal(false);
+  setShowConfirm(false);
+    } catch (err) {
+      console.error(err);
+      setMintResult("Mint failed. See console for details.");
+    } finally {
+      setIsMinting(false);
+    }
+  };
+
+  const handleConfirmMint = async () => {
+    // Close the confirmation modal and proceed with minting
+    setShowConfirm(false);
+    await handleMint();
+  };
+
   const startPlayback = useCallback(() => {
     setIsPlaying(true);
     let step = 0;
@@ -282,6 +327,7 @@ export default function Home() {
                   <Square className="w-4 h-4" />
                 </Button>
                 <Button
+                onClick={() => {handleClick()}}
                   className="bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg hover:shadow-purple-500/50 transition-all"
                 >
                   Mint
@@ -296,6 +342,7 @@ export default function Home() {
           <SoundLibrary onAddTrack={addTrack} />
         </div>
 
+        
         {/* Loop Progress Indicator */}
         {loopEnabled && isPlaying && loopDuration !== -1 && (
           <div className="bg-gray-800 border-b border-gray-700">
@@ -355,6 +402,79 @@ export default function Home() {
           />
         )}
       </div>
+      <div
+        className={`${openModal ? "flex" : "hidden"} transition ease-in-out absolute inset-0 justify-center items-center`}
+        role="dialog"
+        aria-modal={openModal}
+        aria-hidden={!openModal}
+      >
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClick} />
+
+        <div className={`z-10 w-[400px] bg-[#111827] border-2 border-solid border-color-[#374151] rounded-lg p-4`}>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={handleClick}
+              className="px-3 py-2 rounded-md bg-red-400"
+              aria-label="Close"
+            >
+              <IoMdArrowRoundBack />
+            </button>
+            <div className="font-semibold text-center text-2xl flex-1">Mint this beat?</div>
+            <div className="w-10" />
+          </div>
+
+          <label className="block text-sm text-gray-300 mb-2">Beat name</label>
+          <input
+            value={beatName}
+            onChange={(e) => setBeatName(e.target.value)}
+            placeholder="Name of Beat"
+            className="w-full rounded-md px-3 py-2 bg-gray-800 border border-gray-700 text-white mb-4"
+            disabled={isMinting}
+          />
+
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={handleClick}
+              className="px-3 py-2 rounded-md bg-gray-700 text-white"
+              disabled={isMinting}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => setShowConfirm(true)}
+              className={`px-3 py-2 rounded-md bg-purple-600 font-semibold text-white ${isMinting ? 'opacity-60 cursor-wait' : ''}`}
+              disabled={isMinting}
+            >
+              {isMinting ? 'Minting...' : 'Mint the Beat'}
+            </button>
+          </div>
+
+          {mintResult && (
+            <div className="mt-3 text-sm text-gray-300">{mintResult}</div>
+          )}
+        </div>
+      </div>
+
+      {/* Confirmation modal that appears after clicking Mint in the main modal */}
+      <div className={`${showConfirm ? 'flex' : 'hidden'} absolute inset-0 items-center justify-center`}> 
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowConfirm(false)} />
+        <div className="z-20 w-[420px] bg-[#0b1220] border rounded-lg p-4">
+          <h3 className="text-lg font-semibold mb-2">Confirm Mint</h3>
+          <p className="text-sm text-gray-400 mb-4">Image Preview</p>
+
+          <div className="w-full h-48 bg-gray-800 rounded-md flex items-center justify-center mb-4">
+            {/* Placeholder image box */}
+            <img src="../assets/nftSampleImage.png" alt="NFT Preview" className="w-32 h-32 object-contain" />
+          </div>
+
+          <div className="flex gap-2 justify-end">
+            <button onClick={() => setShowConfirm(false)} className="px-3 py-2 rounded-md bg-gray-700 text-white">Back</button>
+            <button onClick={handleConfirmMint} className="px-3 py-2 rounded-md bg-green-600 text-white">Confirm</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
