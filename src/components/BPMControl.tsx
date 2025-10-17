@@ -37,10 +37,10 @@ export function BPMControl({
 
   // customMode toggles the beat-length custom input; loopCustomMode toggles loop custom input
 
-  const handleBPMChange = (newBpm: number) => {
+  const handleBPMChange = useCallback((newBpm: number) => {
     const clampedBpm = Math.max(60, Math.min(200, newBpm));
     onBPMChange(clampedBpm);
-  };
+  }, [onBPMChange]);
 
   const handleTapTempo = useCallback(() => {
     const now = Date.now();
@@ -53,7 +53,7 @@ export function BPMControl({
       const newTimes = [...prev, now].slice(-4);
 
       if (newTimes.length >= 2) {
-        const intervals = [];
+        const intervals: number[] = [];
         for (let i = 1; i < newTimes.length; i++) {
           intervals.push(newTimes[i] - newTimes[i - 1]);
         }
@@ -69,7 +69,7 @@ export function BPMControl({
     tapTimeoutRef.current = setTimeout(() => {
       setTapTimes([]);
     }, 2000);
-  }, []);
+  }, [handleBPMChange]);
 
   const handleBeatLengthChange = (value: string) => {
     if (value === "custom") {
