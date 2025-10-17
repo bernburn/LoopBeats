@@ -238,7 +238,7 @@ export default function Home() {
           <div className="flex items-center justify-between max-w-7xl mx-auto ">
             <div className="max-md:hidden">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Beat IT Base
+                LoopLab
               </h1>
               <p className="text-sm text-gray-400">
                 Professional DAW with Base Blockchain
@@ -281,6 +281,11 @@ export default function Home() {
                 >
                   <Square className="w-4 h-4" />
                 </Button>
+                <Button
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg hover:shadow-purple-500/50 transition-all"
+                >
+                  Mint
+                </Button>
               </div>
 
               {/* Export button removed - use NFTMinter component instead if needed */}
@@ -314,7 +319,7 @@ export default function Home() {
 
         {/* Sequencer Area */}
         <div className="flex-1 overflow-y-auto p-4 bg-gray-950">
-          <div className="max-w-7xl mx-auto space-y-4">
+          <div className="max-w-7xl mx-auto space-y-4 pb-10">
             {tracks.length === 0 ? (
               <div className="text-center py-20">
                 <div className="text-6xl mb-4">🎵</div>

@@ -2,6 +2,8 @@
 
 import type { Track } from "@/types/audio";
 import { Button } from "./ui/button";
+
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { Slider } from "./ui/slider";
 import {
   Volume2,
@@ -10,7 +12,7 @@ import {
   ChevronRight,
   Music,
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -35,6 +37,9 @@ export function Mixer({
 }: MixerProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  const [isSlideDown, setIsSlideDown] = useState(false);
+  const [buttonText, setButtonText] = useState("Show Mixer");
+
   const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
       const scrollAmount = 200;
@@ -45,6 +50,11 @@ export function Mixer({
     }
   };
 
+  const handleClick = () => {
+    setIsSlideDown(!isSlideDown)
+    console.log(isSlideDown)
+  }
+
   const formatPanValue = (pan: number) => {
     if (pan === 0) return "C";
     const direction = pan > 0 ? "R" : "L";
@@ -53,28 +63,34 @@ export function Mixer({
   };
 
   return (
-    <div className="sticky bottom-0 z-10 bg-gray-900 border-t border-gray-700 p-2">
-      <div className="flex items-center justify-between mb-2">
+    <>
+    <button onClick={() => handleClick()} className={`fixed bottom-0 w-auto border-2 border-solid border-color-[#374151] border-radius-0 bg-[#111827] p-2 hover:scale-[1.1] transition ease-in-out`}>Show Mixer</button>
+    <div className={`fixed w-full bottom-0 z-10 bg-gray-900 border-t border-gray-700 p-2 transition ${isSlideDown ? 'translate-y-0' : 'translate-y-full'}`}>
+      <div className={`flex items-center mb-2 transition `}>
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide flex items-center gap-2">
           <Music className="w-3 h-3" />
           Mixer
         </h3>
-        <div className="flex gap-1">
+        <div className="flex gap-1 ml-[20px]">
+          <Button 
+            onClick={() => handleClick()}
+            className={`h-7 text-sm p-0 bg-gray-700 hover:bg-gray-600 text-white `}
+            aria-label="Hide Mixer">Hide Mixer</Button>
           <Button
             size="sm"
             onClick={() => scroll("left")}
-            className="h-7 w-7 p-0 bg-gray-700 hover:bg-gray-600 text-white"
+            className="h-7 bg-gray-700 hover:bg-gray-600 text-white"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <FaChevronLeft />
           </Button>
           <Button
             size="sm"
             onClick={() => scroll("right")}
-            className="h-7 w-7 p-0 bg-gray-700 hover:bg-gray-600 text-white"
+            className="h-7 bg-gray-700 hover:bg-gray-600 text-white"
             aria-label="Scroll right"
           >
-            <ChevronRight className="w-4 h-4" />
+            <FaChevronRight />
           </Button>
         </div>
       </div>
@@ -221,6 +237,6 @@ export function Mixer({
           ))}
         </div>
       </TooltipProvider>
-    </div>
+    </div></>
   );
 }

@@ -23,7 +23,7 @@ export class AudioEngine {
     noteIndex: number,
     duration: number,
     volume: number,
-    pan: number
+    pan: number,
   ): void {
     if (!this.audioContext || !this.masterGain) return;
 
@@ -145,7 +145,7 @@ export class AudioEngine {
     startTime: number,
     noteIndex: number,
     duration: number,
-    volume: number
+    volume: number,
   ): void {
     if (!this.audioContext) return;
 
